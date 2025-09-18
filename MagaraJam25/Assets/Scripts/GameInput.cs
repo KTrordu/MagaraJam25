@@ -5,12 +5,7 @@ public class GameInput : MonoBehaviour
 {
     public static GameInput Instance { get; private set; }
 
-    public enum Bindings
-    {
-        Move_Left,
-        Move_Right,
-        Jump
-    }
+    public event EventHandler OnInteractAlternate;
 
     private PlayerInputActions playerInputActions;
 
@@ -19,7 +14,13 @@ public class GameInput : MonoBehaviour
         Instance = this;
 
         playerInputActions = new PlayerInputActions();
+        playerInputActions.Player.InteractAlternate.performed += InteractAlternate_performed;
         playerInputActions.Player.Enable();
+    }
+
+    private void InteractAlternate_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        OnInteractAlternate?.Invoke(this, EventArgs.Empty);
     }
 
     private void OnDestroy()

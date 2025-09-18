@@ -8,17 +8,23 @@ public class Player : MonoBehaviour
     public static Player Instance;
 
     [SerializeField] private float movementSpeed = 5f;
+    [SerializeField] private float corpsePickupRange = 1.5f;
     [SerializeField] private GameInput gameInput;
 
     private bool isRotated = false;
     private bool isWalking = false;
-
-    private void Awake()
-    {
-    }
+    private bool isCarrying = false;
 
     private void Start()
     {
+        Instance = this;
+
+        GameInput.Instance.OnInteractAlternate += GameInput_OnInteractAlternate;
+    }
+
+    private void GameInput_OnInteractAlternate(object sender, EventArgs e)
+    {
+        HandleInteractAlternate();
     }
 
     private void Update()
@@ -52,5 +58,23 @@ public class Player : MonoBehaviour
         else isWalking = false;
     }
 
+    private void HandleInteractAlternate()
+    {
+        if ((GetPlayerPosition() - Corpse.Instance.GetCorpsePosition()).magnitude >= corpsePickupRange) return;
+
+        if (!isCarrying)
+        {
+            Corpse.Instance.transform.parent = transform;
+            isCarrying = !isCarrying;
+        }
+        else if (isCarrying)
+        {
+            Corpse.Instance.transform.parent = null;
+            isCarrying = !isCarrying;
+        }
+    }
+
     public bool IsWalking() => isWalking;
+
+    public Vector2 GetPlayerPosition() => new Vector2(transform.position.x, transform.position.y);
 }
