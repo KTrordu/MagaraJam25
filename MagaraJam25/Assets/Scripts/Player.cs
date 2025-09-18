@@ -115,5 +115,7 @@ public class Player : MonoBehaviour
 
     public bool IsWalking() => isWalking;
 
+    public bool IsCarrying => isCarrying;
+
     public Vector2 GetPlayerPosition() => new Vector2(transform.position.x, transform.position.y);
 }
