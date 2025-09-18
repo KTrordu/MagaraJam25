@@ -982,8 +982,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e09fd3d914446e42855f41d855072e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 5
-  corpsePickupRange: 1.5
+  movementSpeedMax: 8
+  corpsePickupRange: 3
+  corpseSlowingFactor: 2
   gameInput: {fileID: 191984259}
 --- !u!61 &1812340470
 BoxCollider2D:

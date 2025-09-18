@@ -7,24 +7,32 @@ public class Player : MonoBehaviour
 {
     public static Player Instance;
 
-    [SerializeField] private float movementSpeed = 5f;
+    [SerializeField] private float movementSpeedMax = 8f;
     [SerializeField] private float corpsePickupRange = 1.5f;
+    [SerializeField] private float corpseSlowingFactor = 2f;
     [SerializeField] private GameInput gameInput;
 
     private bool isRotated = false;
     private bool isWalking = false;
     private bool isCarrying = false;
 
-    private void Start()
+    private float movementSpeed;
+
+    private void Awake()
     {
         Instance = this;
 
-        GameInput.Instance.OnInteractAlternate += GameInput_OnInteractAlternate;
+        movementSpeed = movementSpeedMax;
     }
 
-    private void GameInput_OnInteractAlternate(object sender, EventArgs e)
+    private void Start()
     {
-        HandleInteractAlternate();
+        GameInput.Instance.OnInteract += GameInput_OnInteract;
+    }
+
+    private void GameInput_OnInteract(object sender, EventArgs e)
+    {
+        HandleInteract();
     }
 
     private void Update()
@@ -58,18 +66,20 @@ public class Player : MonoBehaviour
         else isWalking = false;
     }
 
-    private void HandleInteractAlternate()
+    private void HandleInteract()
     {
         if ((GetPlayerPosition() - Corpse.Instance.GetCorpsePosition()).magnitude >= corpsePickupRange) return;
 
         if (!isCarrying)
         {
             Corpse.Instance.transform.parent = transform;
+            movementSpeed /= corpseSlowingFactor;
             isCarrying = !isCarrying;
         }
         else if (isCarrying)
         {
             Corpse.Instance.transform.parent = null;
+            movementSpeed = movementSpeedMax;
             isCarrying = !isCarrying;
         }
     }
