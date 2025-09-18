@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 21634437}
   - component: {fileID: 21634438}
   - component: {fileID: 21634440}
+  - component: {fileID: 21634441}
   m_Layer: 0
   m_Name: Corpse
   m_TagString: Untagged
@@ -213,6 +214,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 300a78d371752c04babe2127bbf575c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!50 &21634441
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 21634436}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1 &151535228
 GameObject:
   m_ObjectHideFlags: 0
@@ -945,8 +973,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1812340468}
-  - component: {fileID: 1812340469}
   - component: {fileID: 1812340470}
+  - component: {fileID: 1812340469}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -985,6 +1013,7 @@ MonoBehaviour:
   movementSpeedMax: 8
   corpsePickupRange: 3
   corpseSlowingFactor: 2
+  corpseThrowForce: 100
   gameInput: {fileID: 191984259}
 --- !u!61 &1812340470
 BoxCollider2D:

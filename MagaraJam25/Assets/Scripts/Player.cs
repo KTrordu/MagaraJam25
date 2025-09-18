@@ -18,16 +18,25 @@ public class Player : MonoBehaviour
 
     private float movementSpeed;
 
+    private Vector3 lookDirection;
+
     private void Awake()
     {
         Instance = this;
 
         movementSpeed = movementSpeedMax;
+        lookDirection = Vector2.right;
     }
 
     private void Start()
     {
         GameInput.Instance.OnInteract += GameInput_OnInteract;
+        GameInput.Instance.OnInteractAlternate += GameInput_OnInteractAlternate;
+    }
+
+    private void GameInput_OnInteractAlternate(object sender, EventArgs e)
+    {
+        HandleInteractAlternate();
     }
 
     private void GameInput_OnInteract(object sender, EventArgs e)
@@ -45,6 +54,7 @@ public class Player : MonoBehaviour
         Vector2 inputVector = gameInput.GetMovementVector();
 
         Vector3 moveDirection = new Vector3(inputVector.x, inputVector.y, 0f);
+        if (moveDirection != Vector3.zero) lookDirection = moveDirection;
 
         if (moveDirection.magnitude > 0f)
         {
@@ -72,16 +82,35 @@ public class Player : MonoBehaviour
 
         if (!isCarrying)
         {
-            Corpse.Instance.transform.parent = transform;
-            movementSpeed /= corpseSlowingFactor;
-            isCarrying = !isCarrying;
+            PickCorpseUp();
         }
         else if (isCarrying)
         {
-            Corpse.Instance.transform.parent = null;
-            movementSpeed = movementSpeedMax;
-            isCarrying = !isCarrying;
+            DropCorpse();
         }
+    }
+
+    private void HandleInteractAlternate()
+    {
+        if (!isCarrying) return;
+
+        DropCorpse();
+        Corpse.Instance.ThrowCorpse(lookDirection);
+    }
+    
+    private void PickCorpseUp()
+    {
+        Corpse.Instance.transform.parent = transform;
+        movementSpeed /= corpseSlowingFactor;
+        isCarrying = !isCarrying;
+        Corpse.Instance.StopCorpse();
+    }
+
+    private void DropCorpse()
+    {
+        Corpse.Instance.transform.parent = null;
+        movementSpeed = movementSpeedMax;
+        isCarrying = !isCarrying;
     }
 
     public bool IsWalking() => isWalking;
