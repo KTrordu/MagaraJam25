@@ -1,5 +1,6 @@
 using System;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -39,12 +40,24 @@ public class Player : RoomTransitable
     {
         GameInput.Instance.OnInteract += GameInput_OnInteract;
         GameInput.Instance.OnInteractAlternate += GameInput_OnInteractAlternate;
+        GameInput.Instance.OnInteractAlternateHold_performed += GameInput_OnInteractAlternateHold_performed;
+        GameInput.Instance.OnInteractAlternateHold_canceled += GameInput_OnInteractAlternateHold_canceled;
+
         RoomExit.OnRoomExitTriggered += RoomExit_OnRoomExitTriggered;
     }
 
     private void RoomExit_OnRoomExitTriggered(object sender, EventArgs e)
     {
         isUsedSpiritPush = false;
+    }
+
+    private void GameInput_OnInteractAlternateHold_canceled(object sender, EventArgs e)
+    {
+        HandleInteractAlternateHoldCanceled();
+    }
+    private void GameInput_OnInteractAlternateHold_performed(object sender, EventArgs e)
+    {
+        HandleInteractAlternateHoldPerformed();
     }
 
     private void GameInput_OnInteractAlternate(object sender, EventArgs e)
@@ -130,6 +143,18 @@ public class Player : RoomTransitable
             Corpse.Instance.ThrowCorpse(lookDirection);
         }
     }
+
+    private void HandleInteractAlternateHoldPerformed()
+    {
+        if (!isCarrying) return;
+        Corpse.Instance.ShieldCorpse();
+    }
+    private void HandleInteractAlternateHoldCanceled()
+    {
+        if (!isCarrying) return;
+        Corpse.Instance.StopShieldingCorpse();
+    }
+
     
     private void PickCorpseUp()
     {

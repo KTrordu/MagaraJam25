@@ -32,6 +32,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "InteractAlternateHold",
+                    "type": "Button",
+                    "id": "1c1d897f-9d72-4ea6-9e60-a1882e9cbb3d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -160,10 +169,21 @@
                     "name": "",
                     "id": "b30f662c-3ffe-4ecb-9a46-c2263fe438da",
                     "path": "<Keyboard>/f",
-                    "interactions": "",
+                    "interactions": "Tap",
                     "processors": "",
                     "groups": "",
                     "action": "InteractAlternate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9eee4484-5aa5-4a49-a2e0-8f1b2cbd32f3",
+                    "path": "<Keyboard>/f",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InteractAlternateHold",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

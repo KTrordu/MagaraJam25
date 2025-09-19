@@ -63,4 +63,13 @@ public class Corpse : RoomTransitable
     {
         transform.localPosition = position;
     }
+    public void ShieldCorpse()
+    {
+
+    }
+
+    public void StopShieldingCorpse()
+    {
+
+    }
 }
