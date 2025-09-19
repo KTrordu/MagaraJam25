@@ -29,6 +29,16 @@ public class Corpse : RoomTransitable
         HandleThrowTimer();
     }
 
+    private void HandleThrowTimer()
+    {
+        if (corpseThrowTime > 0) corpseThrowTime -= Time.deltaTime;
+        else if (corpseThrowTime <= 0)
+        {
+            StopCorpse();
+            corpseThrowTime = 0f;
+        }
+    }
+
     public Vector2 GetCorpsePosition() => new Vector2(transform.position.x, transform.position.y);
 
     public void ThrowCorpse(Vector3 throwDirection)
@@ -42,15 +52,15 @@ public class Corpse : RoomTransitable
         rigidBody.velocity = Vector3.zero;
     }
 
-    private void HandleThrowTimer()
+    public Collider2D GetCorpseCollider() => corpseCollider;
+
+    public void SetParent(Transform parent)
     {
-        if (corpseThrowTime > 0) corpseThrowTime -= Time.deltaTime;
-        else if (corpseThrowTime <= 0)
-        {
-            StopCorpse();
-            corpseThrowTime = 0f;
-        }
+        transform.parent = parent;
     }
 
-    public Collider2D GetCorpseCollider() => corpseCollider;
+    public void SetLocalPosition(Vector2 position)
+    {
+        transform.localPosition = position;
+    }
 }

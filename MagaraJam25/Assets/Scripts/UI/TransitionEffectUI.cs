@@ -8,12 +8,6 @@ public class TransitionEffectUI : MonoBehaviour
 {
     public static TransitionEffectUI Instance { get; private set; }
 
-    public event EventHandler<OnTransitionMiddlePointEventArgs> OnTransitionMiddlePoint;
-    public class OnTransitionMiddlePointEventArgs : EventArgs
-    {
-        public RoomExit roomExit;
-    }
-
     private Animator animator;
 
     private const string TRANSITION = "Transition";

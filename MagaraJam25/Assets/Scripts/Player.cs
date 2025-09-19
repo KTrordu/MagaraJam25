@@ -14,6 +14,7 @@ public class Player : RoomTransitable
     [SerializeField] private float corpsePickupRange = 1.5f;
     [SerializeField] private float corpseSlowingFactor = 2f;
     [SerializeField] private GameInput gameInput;
+    [SerializeField] private Transform corpsePositionTransform;
 
     private bool isRotated = false;
     private bool isWalking = false;
@@ -104,7 +105,8 @@ public class Player : RoomTransitable
     
     private void PickCorpseUp()
     {
-        Corpse.Instance.transform.parent = transform;
+        Corpse.Instance.SetParent(transform);
+        Corpse.Instance.SetLocalPosition(corpsePositionTransform.localPosition);
         movementSpeed /= corpseSlowingFactor;
         isCarrying = !isCarrying;
         Corpse.Instance.StopCorpse();
@@ -114,7 +116,7 @@ public class Player : RoomTransitable
 
     private void DropCorpse()
     {
-        Corpse.Instance.transform.parent = null;
+        Corpse.Instance.SetParent(null);
         movementSpeed = movementSpeedMax;
         isCarrying = !isCarrying;
 
