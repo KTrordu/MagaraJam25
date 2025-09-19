@@ -13,12 +13,14 @@ public class Player : RoomTransitable
     [SerializeField] private float movementSpeedMax = 8f;
     [SerializeField] private float corpsePickupRange = 1.5f;
     [SerializeField] private float corpseSlowingFactor = 2f;
+    [SerializeField] private float raycastOffset = 0.6f;
     [SerializeField] private GameInput gameInput;
     [SerializeField] private Transform corpsePositionTransform;
 
     private bool isRotated = false;
     private bool isWalking = false;
     private bool isCarrying = false;
+    private bool isUsedSpiritPush = false;
 
     private float movementSpeed;
     private Vector3 lookDirection;
@@ -37,6 +39,12 @@ public class Player : RoomTransitable
     {
         GameInput.Instance.OnInteract += GameInput_OnInteract;
         GameInput.Instance.OnInteractAlternate += GameInput_OnInteractAlternate;
+        RoomExit.OnRoomExitTriggered += RoomExit_OnRoomExitTriggered;
+    }
+
+    private void RoomExit_OnRoomExitTriggered(object sender, EventArgs e)
+    {
+        isUsedSpiritPush = false;
     }
 
     private void GameInput_OnInteractAlternate(object sender, EventArgs e)
@@ -97,10 +105,30 @@ public class Player : RoomTransitable
 
     private void HandleInteractAlternate()
     {
-        if (!isCarrying) return;
+        if (!isCarrying && !isUsedSpiritPush)
+        {
+            float offsetX;
+            if (lookDirection.x > 0) offsetX = raycastOffset;
+            else if (lookDirection.x < 0) offsetX = -raycastOffset;
+            else offsetX = 0;
 
-        DropCorpse();
-        Corpse.Instance.ThrowCorpse(lookDirection);
+            float offsetY;
+            if (lookDirection.y > 0) offsetY = raycastOffset;
+            else if (lookDirection.y < 0) offsetY = -raycastOffset;
+            else offsetY = 0;
+
+            RaycastHit2D raycastHit = Physics2D.Raycast(new Vector2(transform.position.x + offsetX, transform.position.y + offsetY), lookDirection);
+            if (raycastHit.collider?.gameObject.GetComponent<Corpse>() == null) return;
+            
+            Corpse.Instance.ThrowCorpse(lookDirection);
+            isUsedSpiritPush = true;
+        }
+
+        if (isCarrying)
+        {
+            DropCorpse();
+            Corpse.Instance.ThrowCorpse(lookDirection);
+        }
     }
     
     private void PickCorpseUp()
