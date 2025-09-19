@@ -29,7 +29,7 @@ public class PlayerLight : MonoBehaviour
 
     private void UpdateSight()
     {
-        if (Player.Instance.IsCarrying)
+        if (Player.Instance.IsCarrying())
         {
             sightCountdown = sightCountdownMax;
             light2D.pointLightOuterRadius = startingOuterRadius;

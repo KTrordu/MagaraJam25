@@ -11,6 +11,7 @@ public class Corpse : MonoBehaviour
     [SerializeField] private float corpseThrowVelocity = 30f;
 
     private Rigidbody2D rigidBody;
+    private Collider2D corpseCollider;
     private float corpseThrowTime;
 
     private void Awake()
@@ -18,6 +19,7 @@ public class Corpse : MonoBehaviour
         Instance = this;
 
         rigidBody = GetComponent<Rigidbody2D>();
+        corpseCollider = GetComponent<Collider2D>();
 
         corpseThrowTime = 0;
     }
@@ -49,4 +51,6 @@ public class Corpse : MonoBehaviour
             corpseThrowTime = 0f;
         }
     }
+
+    public Collider2D GetCorpseCollider() => corpseCollider;
 }

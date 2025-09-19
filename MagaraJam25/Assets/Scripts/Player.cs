@@ -7,6 +7,9 @@ public class Player : MonoBehaviour
 {
     public static Player Instance;
 
+    public event EventHandler OnPlayerPickedUpCorpse;
+    public event EventHandler OnPlayerDroppedCorpse;
+
     [SerializeField] private float movementSpeedMax = 8f;
     [SerializeField] private float corpsePickupRange = 1.5f;
     [SerializeField] private float corpseSlowingFactor = 2f;
@@ -17,8 +20,8 @@ public class Player : MonoBehaviour
     private bool isCarrying = false;
 
     private float movementSpeed;
-
     private Vector3 lookDirection;
+    private Collider2D playerCollider;
 
     private void Awake()
     {
@@ -26,6 +29,7 @@ public class Player : MonoBehaviour
 
         movementSpeed = movementSpeedMax;
         lookDirection = Vector2.right;
+        playerCollider = GetComponent<Collider2D>();
     }
 
     private void Start()
@@ -104,6 +108,8 @@ public class Player : MonoBehaviour
         movementSpeed /= corpseSlowingFactor;
         isCarrying = !isCarrying;
         Corpse.Instance.StopCorpse();
+
+        OnPlayerPickedUpCorpse?.Invoke(this, EventArgs.Empty);
     }
 
     private void DropCorpse()
@@ -111,11 +117,15 @@ public class Player : MonoBehaviour
         Corpse.Instance.transform.parent = null;
         movementSpeed = movementSpeedMax;
         isCarrying = !isCarrying;
+
+        OnPlayerDroppedCorpse?.Invoke(this, EventArgs.Empty);
     }
 
     public bool IsWalking() => isWalking;
 
-    public bool IsCarrying => isCarrying;
+    public bool IsCarrying() => isCarrying;
 
     public Vector2 GetPlayerPosition() => new Vector2(transform.position.x, transform.position.y);
+
+    public Collider2D GetPlayerCollider() => playerCollider;
 }
