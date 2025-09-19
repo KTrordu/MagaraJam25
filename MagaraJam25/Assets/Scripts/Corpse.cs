@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Corpse : MonoBehaviour
+public class Corpse : RoomTransitable
 {
-    public static Corpse Instance;
+    public static Corpse Instance { get; private set; }
 
     [SerializeField] private float corpseThrowTimeMax = 0.5f;
     [SerializeField] private float corpseThrowVelocity = 30f;

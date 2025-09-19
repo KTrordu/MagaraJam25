@@ -3,9 +3,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Player : MonoBehaviour
+public class Player : RoomTransitable
 {
-    public static Player Instance;
+    public static Player Instance { get; private set; }
 
     public event EventHandler OnPlayerPickedUpCorpse;
     public event EventHandler OnPlayerDroppedCorpse;
