@@ -13,6 +13,7 @@ public class Player : RoomTransitable
     public event EventHandler OnPlayerMoved;
 
     [SerializeField] private float corpsePickupRange = 1.0f;
+    [SerializeField] private float tileSize = 1.0f;
     [SerializeField] private float raycastOffset = 0.6f;
     [SerializeField] private float movementCooldownMax = 0.3f;
     [SerializeField] private float moveTileSpeed = 1.0f;
@@ -122,10 +123,27 @@ public class Player : RoomTransitable
 
     private void HandleInteract()
     {
-        if ((GetPlayerPosition() - Corpse.Instance.GetCorpsePosition()).magnitude >= corpsePickupRange) return;
-
         if (!isCarrying)
         {
+            if (new Vector2(transform.position.x, transform.position.y) == Corpse.Instance.GetCorpsePosition())
+            {
+                PickCorpseUp();
+                return;
+            }
+
+            float offsetX;
+            if (lookDirection.x > 0) offsetX = raycastOffset;
+            else if (lookDirection.x < 0) offsetX = -raycastOffset;
+            else offsetX = 0;
+
+            float offsetY;
+            if (lookDirection.y > 0) offsetY = raycastOffset;
+            else if (lookDirection.y < 0) offsetY = -raycastOffset;
+            else offsetY = 0;
+
+            RaycastHit2D raycastHit = Physics2D.Raycast(new Vector2(transform.position.x + offsetX, transform.position.y + offsetY), lookDirection, corpsePickupRange);
+            if (raycastHit.collider?.gameObject.GetComponent<Corpse>() == null) return;
+
             PickCorpseUp();
         }
         else if (isCarrying)
