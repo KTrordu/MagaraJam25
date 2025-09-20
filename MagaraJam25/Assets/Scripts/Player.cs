@@ -10,20 +10,25 @@ public class Player : RoomTransitable
 
     public event EventHandler OnPlayerPickedUpCorpse;
     public event EventHandler OnPlayerDroppedCorpse;
+    public event EventHandler OnPlayerMoved;
 
-    [SerializeField] private float movementSpeedMax = 8f;
-    [SerializeField] private float corpsePickupRange = 1.5f;
-    [SerializeField] private float corpseSlowingFactor = 2f;
+    [SerializeField] private float corpsePickupRange = 1.0f;
     [SerializeField] private float raycastOffset = 0.6f;
+    [SerializeField] private float movementCooldownMax = 0.3f;
+    [SerializeField] private float moveTileSpeed = 1.0f;
     [SerializeField] private GameInput gameInput;
-    [SerializeField] private Transform corpsePositionTransform;
+    [SerializeField] private Transform corpsePickUpPositionTransform;
+    [SerializeField] private Transform corpseDropPositionTransform;
 
-    private bool isRotated = false;
+    private float lastMoveTime = -1f;
+    private bool canMove = true;
+    
     private bool isWalking = false;
     private bool isCarrying = false;
     private bool isUsedSpiritPush = false;
 
-    private float movementSpeed;
+    private float movementCooldown;
+
     private Vector3 lookDirection;
     private Collider2D playerCollider;
 
@@ -31,9 +36,10 @@ public class Player : RoomTransitable
     {
         Instance = this;
 
-        movementSpeed = movementSpeedMax;
         lookDirection = Vector2.right;
         playerCollider = GetComponent<Collider2D>();
+
+        movementCooldown = movementCooldownMax;
     }
 
     private void Start()
@@ -44,6 +50,11 @@ public class Player : RoomTransitable
         GameInput.Instance.OnInteractAlternateHold_canceled += GameInput_OnInteractAlternateHold_canceled;
 
         RoomExit.OnRoomExitTriggered += RoomExit_OnRoomExitTriggered;
+    }
+
+    private void Update()
+    {
+        HandleMovement();
     }
 
     private void RoomExit_OnRoomExitTriggered(object sender, EventArgs e)
@@ -70,36 +81,43 @@ public class Player : RoomTransitable
         HandleInteract();
     }
 
-    private void Update()
-    {
-        HandleMovement();
-    }
-
     private void HandleMovement()
     {
-        Vector2 inputVector = gameInput.GetMovementVector();
-
-        Vector3 moveDirection = new Vector3(inputVector.x, inputVector.y, 0f);
-        if (moveDirection != Vector3.zero) lookDirection = moveDirection;
-
-        if (moveDirection.magnitude > 0f)
+        if (Time.time - lastMoveTime < movementCooldown)
         {
-            transform.position += moveDirection * movementSpeed * Time.deltaTime;
-
-            if (!isRotated && moveDirection.x < 0f)
-            {
-                transform.Rotate(0f, 180f, 0f);
-                isRotated = !isRotated;
-            }
-            if (isRotated && moveDirection.x > 0f)
-            {
-                transform.Rotate(0f, 180f, 0f);
-                isRotated = !isRotated;
-            }
-
-            isWalking = true;
+            canMove = false;
+            return;
         }
-        else isWalking = false;
+        else canMove = true;
+
+            Vector2 moveDirection = gameInput.GetMovementVector();
+
+        if (moveDirection != Vector2.zero && canMove)
+        {
+            lookDirection = moveDirection;
+
+            Vector3 newPosition = transform.position;
+
+            if (Mathf.Abs(moveDirection.y) > Mathf.Abs(moveDirection.x))
+            {
+                if (moveDirection.y > 0f)
+                    newPosition += Vector3.up * moveTileSpeed;
+                else if (moveDirection.y < 0f)
+                    newPosition += Vector3.down * moveTileSpeed;
+            }
+            else
+            {
+                if (moveDirection.x > 0f)
+                    newPosition += Vector3.right * moveTileSpeed;
+                else if (moveDirection.x < 0f)
+                    newPosition += Vector3.left * moveTileSpeed;
+            }
+
+            OnPlayerMoved?.Invoke(this, EventArgs.Empty);
+            transform.position = newPosition;
+            lastMoveTime = Time.time;
+        }
+
     }
 
     private void HandleInteract()
@@ -133,14 +151,14 @@ public class Player : RoomTransitable
             RaycastHit2D raycastHit = Physics2D.Raycast(new Vector2(transform.position.x + offsetX, transform.position.y + offsetY), lookDirection);
             if (raycastHit.collider?.gameObject.GetComponent<Corpse>() == null) return;
             
-            Corpse.Instance.SpiritPushCorpse(lookDirection);
+            Corpse.Instance.SpiritPushCorpse(new Vector2(lookDirection.x, lookDirection.y));
             isUsedSpiritPush = true;
         }
 
         if (isCarrying)
         {
             DropCorpse();
-            Corpse.Instance.ThrowCorpse(lookDirection);
+            Corpse.Instance.ThrowCorpse(new Vector2(lookDirection.x, lookDirection.y));
         }
     }
 
@@ -159,8 +177,7 @@ public class Player : RoomTransitable
     private void PickCorpseUp()
     {
         Corpse.Instance.SetParent(transform);
-        Corpse.Instance.SetLocalPosition(corpsePositionTransform.localPosition);
-        movementSpeed /= corpseSlowingFactor;
+        Corpse.Instance.SetLocalPosition(corpsePickUpPositionTransform.localPosition);
         isCarrying = !isCarrying;
         Corpse.Instance.StopCorpse();
 
@@ -170,17 +187,17 @@ public class Player : RoomTransitable
     private void DropCorpse()
     {
         Corpse.Instance.SetParent(null);
-        movementSpeed = movementSpeedMax;
+        Corpse.Instance.transform.position = transform.position + lookDirection;
         isCarrying = !isCarrying;
 
         OnPlayerDroppedCorpse?.Invoke(this, EventArgs.Empty);
     }
-
-    public bool IsWalking() => isWalking;
 
     public bool IsCarrying() => isCarrying;
 
     public Vector2 GetPlayerPosition() => new Vector2(transform.position.x, transform.position.y);
 
     public Collider2D GetPlayerCollider() => playerCollider;
+
+    public Vector2 GetLookDirection() => new Vector2(lookDirection.x, lookDirection.y);
 }

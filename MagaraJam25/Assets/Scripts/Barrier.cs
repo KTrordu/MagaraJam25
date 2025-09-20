@@ -38,8 +38,6 @@ public class Barrier : MonoBehaviour
                 break;
 
             case BlockedEntities.Both:
-                Physics2D.IgnoreCollision(barrierCollider, Player.Instance.GetPlayerCollider());
-                Physics2D.IgnoreCollision(barrierCollider, Corpse.Instance.GetCorpseCollider());
                 break;
         }
     }

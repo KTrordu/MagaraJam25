@@ -10,6 +10,7 @@ public class PressurePlate : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.gameObject.GetComponent<Player>() == null && collision.gameObject.GetComponent<Corpse>() == null) return;
         OnPressurePlatePressed?.Invoke(this, EventArgs.Empty);
     }
 
