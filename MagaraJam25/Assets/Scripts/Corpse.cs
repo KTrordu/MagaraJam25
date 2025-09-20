@@ -8,7 +8,8 @@ public class Corpse : RoomTransitable
     public static Corpse Instance { get; private set; }
 
     [SerializeField] private float corpseThrowTimeMax = 0.5f;
-    [SerializeField] private float corpseThrowVelocity = 30f;
+    [SerializeField] private float corpseThrowVelocity = 10f;
+    [SerializeField] private float corpseSpiritPushVelocity = 5f;
 
     private Rigidbody2D rigidBody;
     private Collider2D corpseCollider;
@@ -44,6 +45,12 @@ public class Corpse : RoomTransitable
     public void ThrowCorpse(Vector3 throwDirection)
     {
         rigidBody.velocity = new Vector2(throwDirection.x * corpseThrowVelocity, throwDirection.y * corpseThrowVelocity);
+        corpseThrowTime = corpseThrowTimeMax;
+    }
+
+    public void SpiritPushCorpse(Vector3 throwDirection)
+    {
+        rigidBody.velocity = new Vector2(throwDirection.x * corpseSpiritPushVelocity, throwDirection.y * corpseSpiritPushVelocity);
         corpseThrowTime = corpseThrowTimeMax;
     }
 

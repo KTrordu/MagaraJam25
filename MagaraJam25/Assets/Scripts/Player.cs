@@ -133,7 +133,7 @@ public class Player : RoomTransitable
             RaycastHit2D raycastHit = Physics2D.Raycast(new Vector2(transform.position.x + offsetX, transform.position.y + offsetY), lookDirection);
             if (raycastHit.collider?.gameObject.GetComponent<Corpse>() == null) return;
             
-            Corpse.Instance.ThrowCorpse(lookDirection);
+            Corpse.Instance.SpiritPushCorpse(lookDirection);
             isUsedSpiritPush = true;
         }
 
