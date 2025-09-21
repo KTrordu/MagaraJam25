@@ -24,7 +24,6 @@ public class Player : RoomTransitable
     private float lastMoveTime = -1f;
     private bool canMove = true;
     
-    private bool isWalking = false;
     private bool isCarrying = false;
     private bool isUsedSpiritPush = false;
 
@@ -47,8 +46,6 @@ public class Player : RoomTransitable
     {
         GameInput.Instance.OnInteract += GameInput_OnInteract;
         GameInput.Instance.OnInteractAlternate += GameInput_OnInteractAlternate;
-        GameInput.Instance.OnInteractAlternateHold_performed += GameInput_OnInteractAlternateHold_performed;
-        GameInput.Instance.OnInteractAlternateHold_canceled += GameInput_OnInteractAlternateHold_canceled;
 
         RoomExit.OnRoomExitTriggered += RoomExit_OnRoomExitTriggered;
     }
@@ -64,15 +61,6 @@ public class Player : RoomTransitable
     private void RoomExit_OnRoomExitTriggered(object sender, EventArgs e)
     {
         isUsedSpiritPush = false;
-    }
-
-    private void GameInput_OnInteractAlternateHold_canceled(object sender, EventArgs e)
-    {
-        HandleInteractAlternateHoldCanceled();
-    }
-    private void GameInput_OnInteractAlternateHold_performed(object sender, EventArgs e)
-    {
-        HandleInteractAlternateHoldPerformed();
     }
 
     private void GameInput_OnInteractAlternate(object sender, EventArgs e)
@@ -214,26 +202,28 @@ public class Player : RoomTransitable
             RaycastHit2D raycastHit = Physics2D.Raycast(new Vector2(transform.position.x + offsetX, transform.position.y + offsetY), lookDirection);
             if (raycastHit.collider?.gameObject.GetComponent<Corpse>() == null) return;
             
-            Corpse.Instance.SpiritPushCorpse(new Vector2(lookDirection.x, lookDirection.y));
-            isUsedSpiritPush = true;
+            bool isSuccessful = Corpse.Instance.SpiritPushCorpse(new Vector2(lookDirection.x, lookDirection.y));
+            isUsedSpiritPush = isSuccessful;
         }
 
         if (isCarrying)
         {
+            float offsetX;
+            if (lookDirection.x > 0) offsetX = raycastOffset;
+            else if (lookDirection.x < 0) offsetX = -raycastOffset;
+            else offsetX = 0;
+
+            float offsetY;
+            if (lookDirection.y > 0) offsetY = raycastOffset;
+            else if (lookDirection.y < 0) offsetY = -raycastOffset;
+            else offsetY = 0;
+
+            RaycastHit2D raycastHit = Physics2D.Raycast(new Vector2(transform.position.x + offsetX, transform.position.y + offsetY), lookDirection, moveTileSpeed);
+            if (raycastHit.collider?.gameObject.GetComponent<Wall>() != null) return;
+
             DropCorpse();
             Corpse.Instance.ThrowCorpse(new Vector2(lookDirection.x, lookDirection.y));
         }
-    }
-
-    private void HandleInteractAlternateHoldPerformed()
-    {
-        if (!isCarrying) return;
-        Corpse.Instance.ShieldCorpse(true);
-    }
-    private void HandleInteractAlternateHoldCanceled()
-    {
-        if (!isCarrying) return;
-        Corpse.Instance.ShieldCorpse(false);
     }
     
     private void PickCorpseUp()

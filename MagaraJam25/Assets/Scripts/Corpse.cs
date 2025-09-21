@@ -12,6 +12,7 @@ public class Corpse : RoomTransitable
     public event EventHandler OnCorpseSpiritPushed;
 
     [SerializeField] private float moveTileSpeed = 1.0f;
+    [SerializeField] private float raycastOffset = 0.6f;
 
     private Rigidbody2D rigidBody;
     private Collider2D corpseCollider;
@@ -28,16 +29,44 @@ public class Corpse : RoomTransitable
 
     public Vector2 GetCorpsePosition() => new Vector2(transform.position.x, transform.position.y);
 
-    public void ThrowCorpse(Vector2 throwingVector)
+    public bool ThrowCorpse(Vector2 throwingVector)
     {
+        float offsetX;
+        if (throwingVector.x > 0) offsetX = raycastOffset;
+        else if (throwingVector.x < 0) offsetX = -raycastOffset;
+        else offsetX = 0;
+
+        float offsetY;
+        if (throwingVector.y > 0) offsetY = raycastOffset;
+        else if (throwingVector.y < 0) offsetY = -raycastOffset;
+        else offsetY = 0;
+
+        RaycastHit2D raycastHit = Physics2D.Raycast(new Vector2(transform.position.x + offsetX, transform.position.y + offsetY), throwingVector, moveTileSpeed);
+        if (raycastHit.collider?.gameObject.GetComponent<Wall>() != null) return false;
+
         transform.position += new Vector3(throwingVector.x * moveTileSpeed, throwingVector.y * moveTileSpeed, 0f);
         OnCorpseThrown?.Invoke(this, EventArgs.Empty);
+        return true;
     }
 
-    public void SpiritPushCorpse(Vector2 throwingVector)
+    public bool SpiritPushCorpse(Vector2 throwingVector)
     {
+        float offsetX;
+        if (throwingVector.x > 0) offsetX = raycastOffset;
+        else if (throwingVector.x < 0) offsetX = -raycastOffset;
+        else offsetX = 0;
+
+        float offsetY;
+        if (throwingVector.y > 0) offsetY = raycastOffset;
+        else if (throwingVector.y < 0) offsetY = -raycastOffset;
+        else offsetY = 0;
+
+        RaycastHit2D raycastHit = Physics2D.Raycast(new Vector2(transform.position.x + offsetX, transform.position.y + offsetY), throwingVector, moveTileSpeed);
+        if (raycastHit.collider?.gameObject.GetComponent<Wall>() != null) return false;
+
         transform.position += new Vector3(throwingVector.x * moveTileSpeed, throwingVector.y * moveTileSpeed, 0f);
         OnCorpseSpiritPushed?.Invoke(this, EventArgs.Empty);
+        return true;
     }
 
     public Collider2D GetCorpseCollider() => corpseCollider;
