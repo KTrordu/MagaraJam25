@@ -1,13 +1,23 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Door : MonoBehaviour
 {
+    public event EventHandler OnDoorOpened;
+    public event EventHandler OnDoorClosed;
+
     [SerializeField] private PressurePlate pressurePlate;
     [SerializeField] private bool isPermanent;
 
     private bool isOpened;
+    private Collider2D doorCollider;
+
+    private void Awake()
+    {
+        doorCollider = GetComponent<Collider2D>();
+    }
 
     void Start()
     {
@@ -29,13 +39,13 @@ public class Door : MonoBehaviour
 
     private void OpenDoor()
     {
-        transform.Rotate(0, 0, 90f);
         isOpened = true;
+        doorCollider.enabled = false;
     }
 
     private void CloseDoor()
     {
-        transform.Rotate(0, 0, -90f);
         isOpened = false;
+        doorCollider.enabled = true;
     }
 }
