@@ -7,6 +7,8 @@ public class Trap : MonoBehaviour
 {
     public event EventHandler OnTrapPressedByPlayer;
 
+    [SerializeField] private bool isDisabled = false;
+
     private Collider2D trapCollider;
 
     private bool isBlockedWithCorpse;
@@ -64,4 +66,6 @@ public class Trap : MonoBehaviour
             Debug.Log("unblocked");
         }
     }
+
+    public bool IsDisabled() => isDisabled;
 }

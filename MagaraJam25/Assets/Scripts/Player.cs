@@ -98,6 +98,7 @@ public class Player : RoomTransitable
             lookDirection = moveDirection;
 
             Vector3 newPosition = transform.position;
+            if (IsBlockedWithTrap(moveDirection)) return;
 
             if (Mathf.Abs(moveDirection.y) > Mathf.Abs(moveDirection.x))
             {
@@ -118,6 +119,28 @@ public class Player : RoomTransitable
             OnPlayerMoved?.Invoke(this, EventArgs.Empty);
             lastMoveTime = Time.time;
         }
+    }
+
+    private bool IsBlockedWithTrap(Vector2 moveDirection)
+    {
+        float offsetX;
+        if (lookDirection.x > 0) offsetX = raycastOffset;
+        else if (lookDirection.x < 0) offsetX = -raycastOffset;
+        else offsetX = 0;
+
+        float offsetY;
+        if (lookDirection.y > 0) offsetY = raycastOffset;
+        else if (lookDirection.y < 0) offsetY = -raycastOffset;
+        else offsetY = 0;
+
+        RaycastHit2D raycastHit = Physics2D.Raycast(new Vector2(transform.position.x + offsetX, transform.position.y + offsetY), lookDirection, moveTileSpeed);
+        if (raycastHit.collider?.gameObject.GetComponent<Trap>() != null)
+        {
+            Trap trap = raycastHit.collider?.gameObject.GetComponent<Trap>();
+            if (trap.IsDisabled()) return false;
+            else return true;
+        }
+        else return false;
     }
 
     private void HandleInteract()
