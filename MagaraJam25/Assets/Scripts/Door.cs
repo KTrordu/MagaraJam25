@@ -50,4 +50,6 @@ public class Door : MonoBehaviour
         doorCollider.enabled = true;
         OnDoorClosed?.Invoke(this, EventArgs.Empty);
     }
+
+    public bool IsOpened() => isOpened;
 }
