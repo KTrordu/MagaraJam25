@@ -192,6 +192,19 @@ public class Player : RoomTransitable
         }
         else if (isCarrying)
         {
+            float offsetX;
+            if (lookDirection.x > 0) offsetX = raycastOffset;
+            else if (lookDirection.x < 0) offsetX = -raycastOffset;
+            else offsetX = 0;
+
+            float offsetY;
+            if (lookDirection.y > 0) offsetY = raycastOffset;
+            else if (lookDirection.y < 0) offsetY = -raycastOffset;
+            else offsetY = 0;
+
+            RaycastHit2D raycastHit = Physics2D.Raycast(new Vector2(transform.position.x + offsetX, transform.position.y + offsetY), lookDirection, moveTileSpeed);
+            if (raycastHit.collider?.gameObject.GetComponent<Wall>() != null) return;
+
             DropCorpse();
         }
     }
