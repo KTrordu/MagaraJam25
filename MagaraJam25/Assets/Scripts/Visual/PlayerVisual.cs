@@ -45,10 +45,7 @@ public class PlayerVisual : MonoBehaviour
     private void Update()
     {
         lookDirection = Player.Instance.GetLookDirection();
-        if (isWalking)
-        {
-            UpdateSpriteDirection(lookDirection);
-        }
+        UpdateSpriteDirection(lookDirection);
     }
 
     private void UpdateSpriteDirection(Vector2 direction)
