@@ -8,6 +8,15 @@ public class PressurePlate : MonoBehaviour
     public event EventHandler OnPressurePlatePressed;
     public event EventHandler OnPressurePlateReleased;
 
+    public enum PressurePlateType
+    {
+        None,
+        A,
+        B
+    }
+
+    [SerializeField] PressurePlateType type;
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.GetComponent<Player>() == null && collision.gameObject.GetComponent<Corpse>() == null) return;

@@ -7,7 +7,16 @@ public class Trap : MonoBehaviour
 {
     public event EventHandler OnTrapPressedByPlayer;
 
+    public enum TrapType
+    {
+        None,
+        A,
+        B
+    }
+
+    [SerializeField] TrapType type;
     [SerializeField] private bool isDisabled = false;
+    [SerializeField] private PressurePlate pressurePlate;
 
     private Collider2D trapCollider;
 
@@ -22,6 +31,22 @@ public class Trap : MonoBehaviour
     {
         Player.Instance.OnPlayerPickedUpCorpse += Player_OnPlayerPickedUpCorpse;
         Player.Instance.OnPlayerDroppedCorpse += Player_OnPlayerDroppedCorpse;
+
+        if (pressurePlate != null)
+        {
+            pressurePlate.OnPressurePlatePressed += PressurePlate_OnPressurePlatePressed;
+            pressurePlate.OnPressurePlateReleased += PressurePlate_OnPressurePlateReleased;
+        }
+    }
+
+    private void PressurePlate_OnPressurePlateReleased(object sender, EventArgs e)
+    {
+        isDisabled = false;
+    }
+
+    private void PressurePlate_OnPressurePlatePressed(object sender, EventArgs e)
+    {
+        isDisabled = true;
     }
 
     private void Player_OnPlayerDroppedCorpse(object sender, EventArgs e)
