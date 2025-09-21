@@ -130,6 +130,8 @@ public class Player : RoomTransitable
                 return;
             }
 
+            if ((GetPlayerPosition() - Corpse.Instance.GetCorpsePosition()).magnitude >= corpsePickupRange) return;
+
             float offsetX;
             if (lookDirection.x > 0) offsetX = raycastOffset;
             else if (lookDirection.x < 0) offsetX = -raycastOffset;
@@ -189,7 +191,6 @@ public class Player : RoomTransitable
         if (!isCarrying) return;
         Corpse.Instance.StopShieldingCorpse();
     }
-
     
     private void PickCorpseUp()
     {

@@ -2575,7 +2575,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   corpsePickupRange: 2
   tileSize: 1
-  raycastOffset: 0.6
+  raycastOffset: 0.5
   movementCooldownMax: 0.3
   moveTileSpeed: 1
   gameInput: {fileID: 191984259}
