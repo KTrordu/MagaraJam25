@@ -52,4 +52,9 @@ public class Door : MonoBehaviour
     }
 
     public bool IsOpened() => isOpened;
+
+    public void ResetDoor()
+    {
+        CloseDoor();
+    }
 }

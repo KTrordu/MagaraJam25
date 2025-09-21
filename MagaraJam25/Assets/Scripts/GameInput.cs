@@ -7,8 +7,11 @@ public class GameInput : MonoBehaviour
 
     public event EventHandler OnInteract;
     public event EventHandler OnInteractAlternate;
-    public event EventHandler OnInteractAlternateHold_performed;
-    public event EventHandler OnInteractAlternateHold_canceled;
+    public event EventHandler<OnResetEventArgs> OnReset;
+    public class OnResetEventArgs : EventArgs
+    {
+        public Room currentRoom;
+    }
 
     private PlayerInputActions playerInputActions;
 
@@ -19,7 +22,16 @@ public class GameInput : MonoBehaviour
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Interact.performed += Interact_performed;
         playerInputActions.Player.InteractAlternate.performed += InteractAlternate_performed;
+        playerInputActions.Player.Reset.performed += Reset_performed;
         playerInputActions.Player.Enable();
+    }
+
+    private void Reset_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        OnReset?.Invoke(this, new OnResetEventArgs
+        {
+            currentRoom = Player.Instance.currentRoom
+        });
     }
 
     private void InteractAlternate_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)

@@ -21,6 +21,8 @@ public class Player : RoomTransitable
     [SerializeField] private Transform corpsePickUpPositionTransform;
     [SerializeField] private Transform corpseDropPositionTransform;
 
+    [SerializeField] public Room currentRoom;
+
     private float lastMoveTime = -1f;
     private bool canMove = true;
     
@@ -300,4 +302,9 @@ public class Player : RoomTransitable
     public Collider2D GetPlayerCollider() => playerCollider;
 
     public Vector2 GetLookDirection() => new Vector2(lookDirection.x, lookDirection.y);
+
+    public void ResetPlayer()
+    {
+        isUsedSpiritPush = false;
+    }
 }
