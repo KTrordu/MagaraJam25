@@ -41,4 +41,9 @@ public class GameInput : MonoBehaviour
     {
         return playerInputActions.Player.Movement.ReadValue<Vector2>();
     }
+
+    public Vector2 GetLookingVector()
+    {
+        return playerInputActions.Player.Looking.ReadValue<Vector2>();
+    }
 }

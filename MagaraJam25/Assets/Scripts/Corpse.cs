@@ -17,8 +17,6 @@ public class Corpse : RoomTransitable
     private Rigidbody2D rigidBody;
     private Collider2D corpseCollider;
 
-    private bool isShielding = false;
-
     private void Awake()
     {
         Instance = this;
@@ -80,11 +78,4 @@ public class Corpse : RoomTransitable
     {
         transform.localPosition = position;
     }
-
-    public void ShieldCorpse(bool isShielding)
-    {
-        this.isShielding = isShielding;
-    }
-
-    public bool ShieldCorpse() => isShielding;
 }

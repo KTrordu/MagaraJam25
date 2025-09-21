@@ -52,10 +52,8 @@ public class Player : RoomTransitable
 
     private void Update()
     {
-        if (!Corpse.Instance.ShieldCorpse())
-        {
-            HandleMovement();            
-        }
+        HandleMovement();
+        HandleLooking();
     }
 
     private void RoomExit_OnRoomExitTriggered(object sender, EventArgs e)
@@ -111,6 +109,13 @@ public class Player : RoomTransitable
             OnPlayerMoved?.Invoke(this, EventArgs.Empty);
             lastMoveTime = Time.time;
         }
+    }
+
+    private void HandleLooking()
+    {
+        Vector2 lookingDirection = gameInput.GetLookingVector();
+
+        if (lookingDirection != Vector2.zero) lookDirection = lookingDirection;
     }
 
     private bool IsBlockedWithTrap(Vector2 moveDirection)
