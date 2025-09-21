@@ -102,6 +102,7 @@ public class Player : RoomTransitable
 
             Vector3 newPosition = transform.position;
             if (IsBlockedWithTrap(moveDirection)) return;
+            if (IsBlockedWithWall(moveDirection)) return;
 
             if (Mathf.Abs(moveDirection.y) > Mathf.Abs(moveDirection.x))
             {
@@ -143,6 +144,23 @@ public class Player : RoomTransitable
             if (trap.IsDisabled()) return false;
             else return true;
         }
+        else return false;
+    }
+
+    private bool IsBlockedWithWall(Vector2 moveDirection)
+    {
+        float offsetX;
+        if (lookDirection.x > 0) offsetX = raycastOffset;
+        else if (lookDirection.x < 0) offsetX = -raycastOffset;
+        else offsetX = 0;
+
+        float offsetY;
+        if (lookDirection.y > 0) offsetY = raycastOffset;
+        else if (lookDirection.y < 0) offsetY = -raycastOffset;
+        else offsetY = 0;
+
+        RaycastHit2D raycastHit = Physics2D.Raycast(new Vector2(transform.position.x + offsetX, transform.position.y + offsetY), lookDirection, moveTileSpeed);
+        if (raycastHit.collider?.gameObject.GetComponent<Wall>() != null) return true;
         else return false;
     }
 
