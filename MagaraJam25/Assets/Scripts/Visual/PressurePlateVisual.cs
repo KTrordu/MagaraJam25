@@ -9,43 +9,34 @@ public class PressurePlateVisual : MonoBehaviour
     [SerializeField] private Sprite pressedSprite;
 
     private SpriteRenderer spriteRenderer;
+    private PressurePlate pressurePlate;
 
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        
+        pressurePlate = pressurePlateTransform.gameObject.GetComponent<PressurePlate>();
+        pressurePlate.OnPressurePlatePressed += PressurePlate_OnPressurePlatePressed;
+        pressurePlate.OnPressurePlateReleased += PressurePlate_OnPressurePlateReleased;
     }
 
-    private void Start()
+    private void PressurePlate_OnPressurePlateReleased(object sender, System.EventArgs e)
     {
-        Player.Instance.OnPlayerMoved += Player_OnPlayerMoved;
-        Corpse.Instance.OnCorpseThrown += Corpse_OnCorpseThrown;
-        Corpse.Instance.OnCorpseSpiritPushed += Corpse_OnCorpseSpiritPushed;
+        DisableSprite();
     }
 
-    private void Corpse_OnCorpseSpiritPushed(object sender, System.EventArgs e)
+    private void PressurePlate_OnPressurePlatePressed(object sender, System.EventArgs e)
     {
-        HandleVisual();
+        EnableSprite();
     }
 
-    private void Corpse_OnCorpseThrown(object sender, System.EventArgs e)
+    private void EnableSprite()
     {
-        HandleVisual();
+        spriteRenderer.sprite = pressedSprite;
     }
 
-    private void Player_OnPlayerMoved(object sender, System.EventArgs e)
+    private void DisableSprite()
     {
-        HandleVisual();
-    }
-
-    private void HandleVisual()
-    {
-        Vector2 pressurePlateLocalPosition = new Vector2(pressurePlateTransform.localPosition.x, pressurePlateTransform.localPosition.y);
-        Vector2 playerPosition = Player.Instance.GetPlayerPosition();
-        Vector2 corpsePosition = Corpse.Instance.GetCorpsePosition();
-        if (pressurePlateLocalPosition == playerPosition || pressurePlateLocalPosition == corpsePosition)
-        {
-            spriteRenderer.sprite = pressedSprite;
-        }
-        else spriteRenderer.sprite = idleSprite;
+        spriteRenderer.sprite = idleSprite;
     }
 }
