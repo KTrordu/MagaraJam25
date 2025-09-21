@@ -55,7 +55,10 @@ public class Player : RoomTransitable
 
     private void Update()
     {
-        HandleMovement();
+        if (!Corpse.Instance.ShieldCorpse())
+        {
+            HandleMovement();            
+        }
     }
 
     private void RoomExit_OnRoomExitTriggered(object sender, EventArgs e)
@@ -207,12 +210,12 @@ public class Player : RoomTransitable
     private void HandleInteractAlternateHoldPerformed()
     {
         if (!isCarrying) return;
-        Corpse.Instance.ShieldCorpse();
+        Corpse.Instance.ShieldCorpse(true);
     }
     private void HandleInteractAlternateHoldCanceled()
     {
         if (!isCarrying) return;
-        Corpse.Instance.StopShieldingCorpse();
+        Corpse.Instance.ShieldCorpse(false);
     }
     
     private void PickCorpseUp()

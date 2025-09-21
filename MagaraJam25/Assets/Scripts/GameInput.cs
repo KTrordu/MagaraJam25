@@ -26,7 +26,7 @@ public class GameInput : MonoBehaviour
 
      private void InteractAlternateHold_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        OnInteractAlternateHold_performed?.Invoke(this, EventArgs.Empty);
+        OnInteractAlternateHold_canceled?.Invoke(this, EventArgs.Empty);
     }
 
     private void InteractAlternateHold_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
