@@ -99,10 +99,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   openFrontDoorSprite: {fileID: 21300000, guid: 482743cc66f9c6e448ee5961284db3d7, type: 3}
   closedFrontDoorSprite: {fileID: 21300000, guid: c2605386822986a4496ef327811d258a, type: 3}
-  openSideDoorSprite: {fileID: 0}
-  closedSideDoorSprite: {fileID: 0}
+  openSideDoorSprite: {fileID: 21300000, guid: af8c71c905b1eec428337d7a729a8843, type: 3}
+  closedSideDoorSprite: {fileID: 21300000, guid: 1ec157d2b61deb040a7dbfd69fc7edc3, type: 3}
   door: {fileID: 751948433227928677}
-  isFrontDoor: 0
+  isFrontDoor: 1
 --- !u!1 &8006768958424957461
 GameObject:
   m_ObjectHideFlags: 0
