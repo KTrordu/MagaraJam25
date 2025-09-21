@@ -305,6 +305,7 @@ public class Player : RoomTransitable
 
     public void ResetPlayer()
     {
+        transform.position = currentRoom.spawnPoint.transform.position;
         isUsedSpiritPush = false;
     }
 }

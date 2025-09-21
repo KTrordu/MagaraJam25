@@ -22,16 +22,12 @@ public class Room : MonoBehaviour
 
     public void ResetState(Room currentRoom)
     {
-        Player.Instance.transform.position = spawnPoint.transform.position;
-        Corpse.Instance.transform.position = spawnPoint.transform.position;
-
         Player.Instance.ResetPlayer();
+        Corpse.Instance.ResetCorpse();
 
         foreach (Door door in resetDoorList)
         {
             door.ResetDoor();
         }
-
-
     }
 }

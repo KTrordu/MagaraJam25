@@ -78,4 +78,9 @@ public class Corpse : RoomTransitable
     {
         transform.localPosition = position;
     }
+
+    public void ResetCorpse()
+    {
+        transform.position = Player.Instance.currentRoom.spawnPoint.transform.position;
+    }
 }
