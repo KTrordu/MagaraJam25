@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4615024873316486537}
   - component: {fileID: 3340542385935084855}
+  - component: {fileID: 8815637221443457749}
   m_Layer: 0
   m_Name: PressurePlateVisual
   m_TagString: Untagged
@@ -73,8 +74,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.89433956, g: 0.6962372, b: 0.032061104, a: 1}
+  m_Sprite: {fileID: -845667769, guid: ce078a2668acb5e4089c5296d96ab679, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -84,6 +85,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8815637221443457749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 658544058834937216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07bda76d76ebba04f80285a05aa97313, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pressurePlateTransform: {fileID: 743593258843148511}
+  idleSprite: {fileID: -845667769, guid: ce078a2668acb5e4089c5296d96ab679, type: 3}
+  pressedSprite: {fileID: -1184309541, guid: ce078a2668acb5e4089c5296d96ab679, type: 3}
 --- !u!1 &4277144447972003317
 GameObject:
   m_ObjectHideFlags: 0

@@ -91,7 +91,7 @@ public class Player : RoomTransitable
         }
         else canMove = true;
 
-            Vector2 moveDirection = gameInput.GetMovementVector();
+        Vector2 moveDirection = gameInput.GetMovementVector();
 
         if (moveDirection != Vector2.zero && canMove)
         {
@@ -114,11 +114,10 @@ public class Player : RoomTransitable
                     newPosition += Vector3.left * moveTileSpeed;
             }
 
-            OnPlayerMoved?.Invoke(this, EventArgs.Empty);
             transform.position = newPosition;
+            OnPlayerMoved?.Invoke(this, EventArgs.Empty);
             lastMoveTime = Time.time;
         }
-
     }
 
     private void HandleInteract()
@@ -197,7 +196,6 @@ public class Player : RoomTransitable
         Corpse.Instance.SetParent(transform);
         Corpse.Instance.SetLocalPosition(corpsePickUpPositionTransform.localPosition);
         isCarrying = !isCarrying;
-        Corpse.Instance.StopCorpse();
 
         OnPlayerPickedUpCorpse?.Invoke(this, EventArgs.Empty);
     }

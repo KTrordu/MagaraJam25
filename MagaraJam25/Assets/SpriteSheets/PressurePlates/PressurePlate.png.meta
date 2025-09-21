@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a3a50bb05467f57438a8c5024864068b
+guid: ce078a2668acb5e4089c5296d96ab679
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,7 +97,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PressurePlateB_0
+      name: PressurePlate_0
       rect:
         serializedVersion: 2
         x: 0
@@ -111,14 +111,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a83e404171bb37c4b956f085898f9042
-      internalID: -181844454
+      spriteID: 18207fd7cfaeae94ebd26c210e617b09
+      internalID: -845667769
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PressurePlateB_1
+      name: PressurePlate_1
       rect:
         serializedVersion: 2
         x: 64
@@ -132,8 +132,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cdd27a94f430d4c48a35ee0fa62376b1
-      internalID: 508995465
+      spriteID: 9179a4c8bc3045d4e8a8e5d2309d629c
+      internalID: -1184309541
       vertices: []
       indices: 
       edges: []
@@ -149,8 +149,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      PressurePlateB_0: -181844454
-      PressurePlateB_1: 508995465
+      PressurePlate_0: -845667769
+      PressurePlate_1: -1184309541
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

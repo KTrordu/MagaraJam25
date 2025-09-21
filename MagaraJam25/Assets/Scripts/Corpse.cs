@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,12 +8,13 @@ public class Corpse : RoomTransitable
 {
     public static Corpse Instance { get; private set; }
 
-    [SerializeField] private float corpseThrowTimeMax = 0.5f;
+    public event EventHandler OnCorpseThrown;
+    public event EventHandler OnCorpseSpiritPushed;
+
     [SerializeField] private float moveTileSpeed = 1.0f;
 
     private Rigidbody2D rigidBody;
     private Collider2D corpseCollider;
-    private float corpseThrowTime;
 
     private void Awake()
     {
@@ -20,23 +22,6 @@ public class Corpse : RoomTransitable
 
         rigidBody = GetComponent<Rigidbody2D>();
         corpseCollider = GetComponent<Collider2D>();
-
-        corpseThrowTime = 0;
-    }
-
-    private void Update()
-    {
-        HandleThrowTimer();
-    }
-
-    private void HandleThrowTimer()
-    {
-        if (corpseThrowTime > 0) corpseThrowTime -= Time.deltaTime;
-        else if (corpseThrowTime <= 0)
-        {
-            StopCorpse();
-            corpseThrowTime = 0f;
-        }
     }
 
     public Vector2 GetCorpsePosition() => new Vector2(transform.position.x, transform.position.y);
@@ -44,17 +29,13 @@ public class Corpse : RoomTransitable
     public void ThrowCorpse(Vector2 throwingVector)
     {
         transform.position += new Vector3(throwingVector.x * moveTileSpeed, throwingVector.y * moveTileSpeed, 0f);
+        OnCorpseThrown?.Invoke(this, EventArgs.Empty);
     }
 
     public void SpiritPushCorpse(Vector2 throwingVector)
     {
         transform.position += new Vector3(throwingVector.x * moveTileSpeed, throwingVector.y * moveTileSpeed, 0f);
-        corpseThrowTime = corpseThrowTimeMax;
-    }
-
-    public void StopCorpse()
-    {
-        rigidBody.velocity = Vector3.zero;
+        OnCorpseSpiritPushed?.Invoke(this, EventArgs.Empty);
     }
 
     public Collider2D GetCorpseCollider() => corpseCollider;
