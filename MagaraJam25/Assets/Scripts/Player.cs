@@ -92,6 +92,7 @@ public class Player : RoomTransitable
             if (IsBlockedWithTrap(moveDirection)) return;
             if (IsBlockedWithWall(moveDirection)) return;
             if (IsBlockedWithClosedDoor(moveDirection)) return;
+            if (IsBlockedSpiritBarrier(moveDirection)) return;
 
             if (Mathf.Abs(moveDirection.y) > Mathf.Abs(moveDirection.x))
             {
@@ -182,6 +183,28 @@ public class Player : RoomTransitable
         else return false;
     }
 
+    private bool IsBlockedSpiritBarrier(Vector2 moveDirection)
+    {
+        float offsetX;
+        if (lookDirection.x > 0) offsetX = raycastOffset;
+        else if (lookDirection.x < 0) offsetX = -raycastOffset;
+        else offsetX = 0;
+
+        float offsetY;
+        if (lookDirection.y > 0) offsetY = raycastOffset;
+        else if (lookDirection.y < 0) offsetY = -raycastOffset;
+        else offsetY = 0;
+
+        RaycastHit2D raycastHit = Physics2D.Raycast(new Vector2(transform.position.x + offsetX, transform.position.y + offsetY), lookDirection, moveTileSpeed);
+        if (raycastHit.collider?.gameObject.GetComponent<Barrier>() != null)
+        {
+            Barrier barrier = raycastHit.collider?.gameObject.GetComponent<Barrier>();
+            if (!barrier.IsBlockingPlayer()) return false;
+            else return true;
+        }
+        else return false;
+    }
+
     private void HandleInteract()
     {
         if (!isCarrying)
@@ -238,19 +261,6 @@ public class Player : RoomTransitable
     {
         if (!isCarrying && !isUsedSpiritPush)
         {
-            //float offsetX;
-            //if (lookDirection.x > 0) offsetX = raycastOffset;
-            //else if (lookDirection.x < 0) offsetX = -raycastOffset;
-            //else offsetX = 0;
-
-            //float offsetY;
-            //if (lookDirection.y > 0) offsetY = raycastOffset;
-            //else if (lookDirection.y < 0) offsetY = -raycastOffset;
-            //else offsetY = 0;
-
-            //RaycastHit2D raycastHit = Physics2D.Raycast(new Vector2(transform.position.x + offsetX, transform.position.y + offsetY), lookDirection);
-            //if (raycastHit.collider?.gameObject.GetComponent<Corpse>() == null) return;
-
             if (!(transform.position.x == Corpse.Instance.transform.position.x || transform.position.y == Corpse.Instance.transform.position.y)) return;
             
             bool isSuccessful = Corpse.Instance.SpiritPushCorpse(new Vector2(lookDirection.x, lookDirection.y));

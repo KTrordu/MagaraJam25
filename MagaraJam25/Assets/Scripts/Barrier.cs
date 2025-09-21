@@ -7,38 +7,13 @@ public class Barrier : MonoBehaviour
     public enum BlockedEntities
     {
         Player,
-        Corpse,
-        Both
+        Corpse
     }
 
     [SerializeField] private BlockedEntities blockedEntities;
 
-    Collider2D barrierCollider;
+    public BlockedEntities GetBlockedEntities() { return blockedEntities; }
 
-    private void Awake()
-    {
-        barrierCollider = GetComponent<Collider2D>();
-    }
-
-    private void Start()
-    {
-        HandleBlockedEntities();
-    }
-
-    private void HandleBlockedEntities()
-    {
-        switch (blockedEntities)
-        {
-            case BlockedEntities.Player:
-                Physics2D.IgnoreCollision(barrierCollider, Corpse.Instance.GetCorpseCollider());
-                break;
-
-            case BlockedEntities.Corpse:
-                Physics2D.IgnoreCollision(barrierCollider, Player.Instance.GetPlayerCollider());
-                break;
-
-            case BlockedEntities.Both:
-                break;
-        }
-    }
+    public bool IsBlockingPlayer() => blockedEntities == BlockedEntities.Player;
+    public bool IsBlockingCorpse() => blockedEntities == BlockedEntities.Corpse;
 }
