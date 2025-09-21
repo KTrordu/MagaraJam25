@@ -15,12 +15,12 @@ public class Trap : MonoBehaviour
     }
 
     [SerializeField] TrapType type;
-    [SerializeField] private bool isDisabled = false;
     [SerializeField] private PressurePlate pressurePlate;
 
-    private Collider2D trapCollider;
+    private bool isDisabledWithPressurePlate = false;
+    private bool isDisabledByCorpse = false;
 
-    private bool isBlockedWithCorpse;
+    private Collider2D trapCollider;
 
     private void Awake()
     {
@@ -41,20 +41,19 @@ public class Trap : MonoBehaviour
 
     private void PressurePlate_OnPressurePlateReleased(object sender, EventArgs e)
     {
-        isDisabled = false;
+        isDisabledWithPressurePlate = false;
     }
 
     private void PressurePlate_OnPressurePlatePressed(object sender, EventArgs e)
     {
-        isDisabled = true;
+        isDisabledWithPressurePlate = true;
     }
 
     private void Player_OnPlayerDroppedCorpse(object sender, EventArgs e)
     {
         if (trapCollider.IsTouching(Corpse.Instance.GetCorpseCollider()))
         {
-            isBlockedWithCorpse = true;
-            Debug.Log("blocked");
+            isDisabledByCorpse = true;
         }
     }
 
@@ -67,8 +66,7 @@ public class Trap : MonoBehaviour
     {
         if (collision.gameObject.GetComponent<Corpse>() != null && !Player.Instance.IsCarrying())
         {
-            isBlockedWithCorpse = true;
-            Debug.Log("blocked");
+            isDisabledByCorpse = true;
         }
 
         if (collision.gameObject.GetComponent<Corpse>() != null && Player.Instance.IsCarrying())
@@ -76,21 +74,19 @@ public class Trap : MonoBehaviour
             HandleCorpseRemoval();
         }
 
-        if (collision.gameObject.GetComponent<Player>() != null && !isBlockedWithCorpse)
+        if (collision.gameObject.GetComponent<Player>() != null && !IsDisabled())
         {
             OnTrapPressedByPlayer?.Invoke(this, EventArgs.Empty);
-            Debug.Log("player trap");
         }
     }
 
     private void HandleCorpseRemoval()
     {
-        if (isBlockedWithCorpse)
+        if (isDisabledByCorpse)
         {
-            isBlockedWithCorpse = false;
-            Debug.Log("unblocked");
+            isDisabledByCorpse = false;
         }
     }
 
-    public bool IsDisabled() => isDisabled;
+    public bool IsDisabled() => isDisabledWithPressurePlate || isDisabledByCorpse;
 }
