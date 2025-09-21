@@ -41,11 +41,13 @@ public class Door : MonoBehaviour
     {
         isOpened = true;
         doorCollider.enabled = false;
+        OnDoorOpened?.Invoke(this, EventArgs.Empty);
     }
 
     private void CloseDoor()
     {
         isOpened = false;
         doorCollider.enabled = true;
+        OnDoorClosed?.Invoke(this, EventArgs.Empty);
     }
 }
